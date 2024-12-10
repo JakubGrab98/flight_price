@@ -1,7 +1,8 @@
 import requests
+import os
 import json
 from datetime import datetime
-import const as ct
+import kiwi_api.const as ct
 
 parameters_dict = {
     "fly_from": "WAW",
@@ -23,16 +24,17 @@ def get_flight_data(parameters: dict):
     except requests.exceptions.RequestException as e:
         print(f"{e}")
 
-def save_to_json(data, file_name):
+def save_to_json(json_data: dict, target_dir: str, file_name: str):
     """
     Saves data to JSON file within the /data/raw/ directory.
-    :param data: Data to be saved.
+    :param json_data: Data to be saved.
+    :param target_dir: Directory where data should be saved.
     :param file_name: Name of the file to be saved.
     """
     current_timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    file = f"data/raw/{current_timestamp}-{file_name}.json"
+    file = os.path.join(target_dir, f"{current_timestamp}-{file_name}.json")
     with open(file, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
+        json.dump(json_data, f, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
     data = get_flight_data(parameters_dict)

@@ -4,12 +4,6 @@ import json
 from datetime import datetime
 import kiwi_api.const as ct
 
-parameters_dict = {
-    "fly_from": "WAW",
-    "date_from": "20/01/2025",
-    "date_to": "24/01/2025",
-    "one_per_date": 1,
-}
 
 def get_flight_data(parameters: dict):
     """
@@ -35,7 +29,3 @@ def save_to_json(json_data: dict, target_dir: str, file_name: str):
     file = os.path.join(target_dir, f"{current_timestamp}-{file_name}.json")
     with open(file, "w", encoding="utf-8") as f:
         json.dump(json_data, f, ensure_ascii=False, indent=4)
-
-if __name__ == "__main__":
-    data = get_flight_data(parameters_dict)
-    save_to_json(data, "flight_details")

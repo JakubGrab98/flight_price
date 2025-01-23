@@ -3,3 +3,4 @@
 .env
 data/
 kiwi_api/__pycache__
+docker-compose.yaml

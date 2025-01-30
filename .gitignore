@@ -1,2 +1,6 @@
 .venv
 .idea
+.env
+aiflow.env
+dags/__pycache__
+sql/init_script

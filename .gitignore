@@ -5,3 +5,6 @@ data/
 kiwi_api/__pycache__
 docker-compose.yaml
 airflow.env
+etl/__pycache__/
+etl/sql/init_script/
+pipeline/__pycache__/

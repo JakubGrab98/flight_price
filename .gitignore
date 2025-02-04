@@ -2,5 +2,13 @@
 .idea
 .env
 aiflow.env
-dags/__pycache__
+dags/__pycache__/
 sql/init_script
+dbt/logs
+airflow.env
+data/
+dbt/.user.yml
+dbt/profiles.yml
+dbt/target
+etl/__pycache__/
+logs/

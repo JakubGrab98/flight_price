@@ -1,3 +1,9 @@
+{{ config(
+    materialized='incremental',
+    unique_key=['flight_id', 'segment_id']
+) }}
+
+
 SELECT
     flight_id,
     route->>'id' AS segment_id,

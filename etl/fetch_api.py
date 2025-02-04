@@ -5,10 +5,13 @@ import json
 from datetime import datetime
 import time
 import psycopg2
+from dotenv import load_dotenv
 from config import DB_CONFIG
 import const as ct
 import utils as ut
 
+
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +32,7 @@ def get_flight_data(params: dict):
     """
     try:
         response = requests.get(ct.SEARCH_URL, headers=HEADERS, params=params)
-        data = response.json()
+        data = response.json().get("data")
         logger.info("Flight data was retrieved!")
         return data
     except IndexError as e:
@@ -37,8 +40,9 @@ def get_flight_data(params: dict):
         return None
     except Exception as e:
         logger.error(f"An error occurred {e}")
+        return None
 
-def store_api_data(responses: list) -> None:
+def store_api_data(responses: set) -> None:
     """
     Inserts raw API data to bronze table within postgres.
     :param responses: List of retrieved JSON responses.
@@ -61,7 +65,7 @@ def store_api_data(responses: list) -> None:
                         INSERT INTO bronze_flights (api_data, inserted_at)
                         VALUES (%s, %s)
                         """,
-                        (json.dumps(response), datetime.now())
+                        (json.dumps(response[0]), datetime.now())
                    )
                 conn.commit()
                 logger.info("Data inserted successfully!")
@@ -79,6 +83,7 @@ def main():
         "return_to": ut.get_future_date(num_days=3, num_months=6),
         "max_stopovers": 1,
         "curr": ct.CURRENCY,
+        "one_for_city": 1,
     }
 
     all_responses = []
@@ -89,9 +94,32 @@ def main():
         if index % 30 == 0 or index == len(ct.AIRPORT_CODES):
             store_api_data(all_responses)
             all_responses = []
-            time.sleep(60)
+            time.sleep(70)
         if response:
             all_responses.append(response)
 
+    # ut.save_to_json(all_responses, r"C:\Users\kubag\PycharmProjects\flight_price\data\raw", "flight_details")
+
 if __name__ == "__main__":
     main()
+    # params = {
+    #     "fly_from": "WAW",
+    #     "date_from": ut.get_future_date(),
+    #     "date_to": ut.get_future_date(num_months=6),
+    #     "return_from": ut.get_future_date(3),
+    #     "return_to": ut.get_future_date(num_days=3, num_months=6),
+    #     "max_stopovers": 1,
+    #     "curr": ct.CURRENCY,
+    # }
+    #
+    # all_responses = []
+    # # codes = ["CRL", "LCA"]
+    #
+    # for code in ct.AIRPORT_CODES:
+    #     params["fly_to"] = code
+    #     response = get_flight_data(params)
+    #     if response:
+    #         print("correct_response")
+    #         all_responses.append(response)
+
+    # ut.save_to_json(all_responses, r"C:\Users\kubag\PycharmProjects\flight_price\data\raw", "flight_details")

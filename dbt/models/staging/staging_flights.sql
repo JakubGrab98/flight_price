@@ -1,12 +1,13 @@
-SELECT
+SELECT DISTINCT
     id AS flight_id,
-    data->>'flyFrom' AS departure_airport,
-    data->>'flyTo' AS arrival_airport,
-    data->>'cityTo' AS arrival_city,
-    data->>'cityFrom' AS departure_city,
-    (data->>'price')::NUMERIC AS price,
-    data->'airlines' AS airlines_json,
-    data->'fare' AS fare_json,
-    data->'route' AS route_json,
-    created_at
+    (api_data::jsonb)->>'id' AS api_id,
+    (api_data::jsonb)->>'flyFrom' AS departure_airport,
+    (api_data::jsonb)->>'flyTo' AS arrival_airport,
+    (api_data::jsonb)->>'cityTo' AS arrival_city,
+    (api_data::jsonb)->>'cityFrom' AS departure_city,
+    (api_data::jsonb->>'price')::NUMERIC AS price,
+    (api_data::jsonb)->'airlines' AS airlines_json,
+    (api_data::jsonb)->'fare' AS fare_json,
+    (api_data::jsonb)->'route' AS route_json,
+    {{ dbt.current_timestamp() }} AS created_at
 FROM {{ source('public', 'bronze_flights') }}

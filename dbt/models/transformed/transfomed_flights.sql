@@ -1,5 +1,12 @@
+{{ config(
+    materialized='incremental',
+    unique_key=['flight_id', 'api_id']
+) }}
+
+
 SELECT
     flight_id,
+    api_id,
     departure_airport,
     arrival_airport,
     arrival_city,

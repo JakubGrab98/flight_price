@@ -13,6 +13,6 @@ models:
     staging:
       materialized: view
     transform:
-      materialized: table
+      materialized: view
     marts:
       materialized: table

@@ -27,7 +27,7 @@ with DAG("flight_flow",
 
     dbt_run = BashOperator(
         task_id='dbt_run',
-        bash_command='docker exec dbt_container dbt run'
+        bash_command='cd /opt/airflow/dbt && dbt run'
     )
 
     extract_api_data >> dbt_run

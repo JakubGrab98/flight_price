@@ -1,9 +1,3 @@
-{{ config(
-    materialized='incremental',
-    unique_key=['flight_id', 'segment_id']
-) }}
-
-
 SELECT
     flight_id,
     route->>'id' AS segment_id,
@@ -17,6 +11,7 @@ SELECT
     (route->>'local_arrival')::TIMESTAMP AS arrival_time,
     (route->>'utc_departure')::TIMESTAMP AS utc_departure,
     (route->>'utc_arrival')::TIMESTAMP AS utc_arrival,
-    (route->>'vehicle_type') AS vehicle_type
+    (route->>'vehicle_type') AS vehicle_type,
+    inserted_at
 FROM {{ ref('staging_flights') }},
 LATERAL jsonb_array_elements(route_json) AS route

@@ -1,3 +1,4 @@
 requests
 python-dotenv
-apache-airflow[postgres]
+dbt-core
+dbt-postgres

@@ -30,4 +30,9 @@ with DAG("flight_flow",
         bash_command='cd /opt/airflow/dbt && dbt run'
     )
 
-    extract_api_data >> dbt_run
+    dbt_test = BashOperator(
+        task_id='dbt_test',
+        bash_command='cd /opt/airflow/dbt && dbt test'
+    )
+
+    extract_api_data >> dbt_run >> dbt_test

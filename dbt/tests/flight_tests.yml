@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: transformed_fares
+    description: "Cleaned fares data."
+    columns:
+      - name: api_id
+        tests:
+          - not_null
+          - unique
+
+  - name: transformed_flights
+    description: "Cleaned flights data."
+    columns:
+      - name: api_id
+        tests:
+          - not_null
+          - unique
+
+  - name: mart_airport_statistic
+    description: "Airport statistics"
+    columns:
+      - name: departure_airport
+        tests:
+          - not_null
+
+  - name: mart_waw_flight_trends
+    description: "Flight trends from Warsaw"
+    columns:
+      - name: month
+        tests:
+          - not_null
